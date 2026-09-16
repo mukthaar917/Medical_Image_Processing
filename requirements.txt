@@ -1,0 +1,12 @@
+streamlit>=1.46
+torch>=2.2
+torchvision>=0.17
+torchxrayvision>=1.5
+scikit-image>=0.22
+pillow>=10.0
+numpy>=1.26
+pandas>=2.2
+sentence-transformers>=3.0
+requests>=2.31
+pydicom>=3.0
+matplotlib>=3.8
