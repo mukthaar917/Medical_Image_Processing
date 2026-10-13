@@ -1,6 +1,24 @@
+# Virtual environments
 .venv/
-__pycache__/
+venv/
+ENV/
+
+# Dataset and media files
 data/
 *.dcm
+*.png
+*.jpg
+*.jpeg
+*.csv
+*.hdf5
+*.zip
+*.tar.gz
+
+# Secrets and credentials
 .env
 .streamlit/secrets.toml
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
