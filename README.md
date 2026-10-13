@@ -2,25 +2,25 @@
 
 This project is a **research/demo application**, not a medical device and not intended for diagnosis or clinical decision-making.
 
-## MVP scope
+## MVP Scope
 
 - Upload chest X-ray PNG/JPG/JPEG/DICOM
-- Preprocess with TorchXRayVision utilities
-- Run a pretrained DenseNet121 chest X-ray model
-- Show model output scores
-- Retrieve relevant local text using Sentence Transformers
-- Generate a constrained summary using a local Ollama LLM
-- Streamlit dashboard
+- Preprocess images for deep learning ingestion
+- **Updated:** Run zero-shot vision classification using `BiomedCLIP-PubMedBERT_256-vit_base_patch16_224`.
+- **New:** Apply clinically validated, pathology-specific thresholds (calculated via Youden's Index) to determine Positive/Negative classifications.
+- **Updated:** Retrieve relevant local clinical text using a local FAISS vector database. RAG is conditionally triggered *only* for positive findings.
+- **Updated:** Generate a constrained AI draft report using a local Ollama LLM (`llama3`). 
+- **New:** Radiologist-in-the-loop review interface for final clinical approval within the Streamlit dashboard.
 
 ## Architecture
 
 X-ray upload
 → preprocessing
-→ TorchXRayVision DenseNet121
-→ pathology model scores
-→ semantic RAG retrieval
-→ constrained LLM prompt
-→ research summary + dashboard
+→ BiomedCLIP (Zero-Shot Vision)
+→ Calibrated Clinical Thresholds
+→ Conditioned FAISS RAG Retrieval
+→ Constrained Llama3 Draft Report
+→ Radiologist-in-the-loop Final Review
 
 ## 1. Create environment
 
