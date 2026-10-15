@@ -121,6 +121,8 @@ class ClinicalRadiologyPipeline:
         return findings
 
     def generate_draft_report(self, positive_findings: list, rag_context: str):
+        pos_str = ", ".join(positive_findings) if positive_findings else "No acute cardiopulmonary abnormalities."
+        
         template = """
         You are an expert radiologist writing a final diagnostic report.
         
@@ -139,10 +141,24 @@ class ClinicalRadiologyPipeline:
         Generate a professional, highly structured medical report containing strictly a 'Findings' section and an 'Impression' section.
         """
         prompt = PromptTemplate(input_variables=["positive_findings", "rag_context"], template=template)
-        pos_str = ", ".join(positive_findings) if positive_findings else "None"
-        
         chain = prompt | self.llm
-        return chain.invoke({"positive_findings": pos_str, "rag_context": rag_context})
+
+        try:
+            # Attempt to query local Ollama instance
+            return chain.invoke({"positive_findings": pos_str, "rag_context": rag_context})
+        except Exception:
+            # Fallback if Ollama is offline or running on Streamlit Cloud
+            fallback_text = (
+                "### AI Draft Report (Deterministic Mode - Ollama Offline)\n\n"
+                f"**Indication:** AI-assisted Chest X-ray evaluation.\n\n"
+                f"**Preliminary Findings:**\n- {pos_str}\n\n"
+                "**Clinical Context Summary:**\n"
+                f"{rag_context if rag_context else 'No critical reference thresholds exceeded.'}\n\n"
+                "**Impression:**\n"
+                "Automated screening completed. Preliminary findings require formal verification "
+                "by a licensed radiologist before clinical reliance."
+            )
+            return fallback_text
 
 @st.cache_resource
 def load_pipeline(ollama_model):
